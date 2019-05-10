@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">deeplinkDemo</string>
+    <string name="deeplink_host">host</string>
+    <string name="deeplink_scheme">scheme</string>
+    <string name="target_view">This is target activity！</string>
+    <string name="deeplink_path">/path</string>
+    <string name="deeplink_path_pattern">pattern</string>
 </resources>
