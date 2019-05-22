@@ -11,14 +11,18 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
             tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".InAppBrowserActivity">
+        </activity>
         <activity android:name=".TargetActivity"/>
         <activity
                 android:name=".DeepLinkActivity"
                 android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
+
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
+
                 <data
                         android:host="@string/deeplink_host"
                         android:scheme="@string/deeplink_scheme"/>
@@ -27,6 +31,7 @@
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
+
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
