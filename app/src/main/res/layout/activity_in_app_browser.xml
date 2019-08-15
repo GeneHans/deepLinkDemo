@@ -5,32 +5,50 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".InAppBrowserActivity">
+        tools:context=".inAPPBrowser.InAppBrowserActivity">
 
     <com.example.deeplinkdemo.custumView.ScrollWebView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/webview"/>
-
     <LinearLayout
             android:id="@+id/ll_bottom_bar"
-            app:layout_constraintBottom_toBottomOf="parent"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
+            android:background="@color/colorPrimary"
             android:orientation="horizontal"
-            android:padding="10dp"
-    android:background="@color/colorPrimary">
-        <Button
-                android:id="@+id/btn_back"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-        <View
+            android:paddingLeft="41dp"
+            android:paddingTop="9dp"
+            android:paddingRight="41dp"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent">
+        <ImageView
+                android:id="@+id/img_back_gray"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:src="@mipmap/ic_browser_left_gray"/>
+        <ImageView
+                android:id="@+id/img_back_blue"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:src="@mipmap/ic_browser_left_blue"
+                android:visibility="gone"/>
+        <TextView
+                android:id="@+id/text_progress"
+                android:layout_gravity="center"
+                android:layout_weight="1"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"/>
-        <Button
-                android:id="@+id/btn_forward"
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
+        <ImageView
+                android:id="@+id/img_forward_gray"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:src="@mipmap/ic_browser_right_gray"/>
+        <ImageView
+                android:id="@+id/img_forward_blue"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:src="@mipmap/ic_browser_right_blue"
+                android:visibility="gone"/>
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

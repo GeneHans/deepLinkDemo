@@ -1,4 +1,4 @@
-package com.example.deeplinkdemo
+package com.example.deeplinkdemo.deeplink
 
 /**
  *  @author Gene Hans
@@ -6,6 +6,7 @@ package com.example.deeplinkdemo
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import com.example.deeplinkdemo.R
 
 class DeepLinkActivity : AppCompatActivity() {
 
