@@ -4,9 +4,11 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.PopupMenu
+import android.text.TextUtils
 import android.view.KeyEvent
 import android.view.View
 import android.webkit.*
@@ -32,6 +34,8 @@ class InAppBrowserActivity : AppCompatActivity(), ScrollWebView.OnPageListener {
     private var progressBar: ProgressBar? = null
     private var TAG = "openWeb"
     private var currentUrl = ""
+    private var cookieManager = CookieManager.getInstance()
+    private var cookie = "name=xxxx"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,6 +51,7 @@ class InAppBrowserActivity : AppCompatActivity(), ScrollWebView.OnPageListener {
         setWebSetting()
         //设置所有监听
         setAllListener()
+        setCookie(cookie, currentUrl)
         webView?.loadUrl(url)
     }
 
@@ -158,6 +163,54 @@ class InAppBrowserActivity : AppCompatActivity(), ScrollWebView.OnPageListener {
     }
 
     /**
+     * 设置cookie
+     */
+    private fun setCookie(cookie: String, url: String) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            cookieManager.removeSessionCookies(null)
+            cookieManager.flush()
+        } else {
+            cookieManager.removeSessionCookie()
+            CookieSyncManager.getInstance().sync()
+        }
+        if (isDomainXXX(url)) {
+            var cookieString = cookie + "; domain=" + getDomain(url) + "; path=" + "/"
+            cookieManager.setAcceptCookie(true)
+            cookieManager.setCookie(url, cookieString)
+        }
+    }
+
+    /**
+     * 根据传入的URL获取一级域名
+     *
+     * @param url
+     * @return
+     */
+    private fun getDomain(url: String): String {
+        var domain = ""
+        if (!TextUtils.isEmpty(url) && url.startsWith("http")) {
+            try {
+                val host = Uri.parse(url).host
+                if (!TextUtils.isEmpty(host) && host!!.contains(".")) {
+                    domain = host.substring(host.indexOf("."), host.length)
+                }
+            } catch (ex: Exception) {
+            }
+        }
+        return domain
+    }
+
+    /**
+     * 根据传入的URL判断是否为xxx域名，默认不是
+     *
+     * @param url
+     * @return
+     */
+    private fun isDomainXXX(url: String): Boolean {
+        return getDomain(url) == ".xxx.com"
+    }
+
+    /**
      * 设置WebView Client
      */
     private fun setWebViewClient() {
@@ -171,6 +224,7 @@ class InAppBrowserActivity : AppCompatActivity(), ScrollWebView.OnPageListener {
                     return
                 updateBottomBar()
                 currentUrl = url
+                setCookie(cookie, currentUrl)
                 //标准网址直接加载
                 if (url.startsWith("http://") || url.startsWith("https://")) {
                     super.onPageStarted(view, url, favicon)
