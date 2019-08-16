@@ -1,8 +1,18 @@
 <resources>
     <string name="app_name">deeplinkDemo</string>
+
+    <!--deeplink start-->
     <string name="deeplink_host">host</string>
     <string name="deeplink_scheme">scheme</string>
     <string name="target_view">This is target activity！</string>
     <string name="deeplink_path">/path</string>
     <string name="deeplink_path_pattern">pattern</string>
+    <!--deeplink end-->
+
+    <!--browser toolbar menu start-->
+    <string name="browser_refresh">刷新</string>
+    <string name="browser_copy_link">复制链接</string>
+    <string name="browser_open_others">在浏览器打开</string>
+    <!--browser toolbar menu end-->
+
 </resources>

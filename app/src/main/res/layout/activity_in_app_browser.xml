@@ -6,16 +6,56 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".inAPPBrowser.InAppBrowserActivity">
+    <android.support.v7.widget.Toolbar
+            android:id="@+id/browser_toolbar"
+            app:layout_constraintBottom_toTopOf="@+id/webview"
+            app:layout_constraintTop_toTopOf="parent"
+            app:popupTheme="@style/OverflowMenuStyle"
+            app:contentInsetStart="0dp"
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+        <LinearLayout
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            <ImageView
+                    android:padding="10dp"
+                    android:id="@+id/img_back"
+                    android:src="@mipmap/ic_browser_left_gray"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            <TextView
+                    android:gravity="center"
+                    android:id="@+id/text_title"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"/>
+            <ImageView
+                    android:padding="10dp"
+                    android:id="@+id/img_menu"
+                    android:src="@mipmap/ic_browser_more"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+        </LinearLayout>
+    </android.support.v7.widget.Toolbar>
 
+    <ProgressBar
+            style="?android:attr/progressBarStyleHorizontal"
+            android:id="@+id/browser_progressbar"
+            app:layout_constraintTop_toBottomOf="@+id/browser_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"/>
     <com.example.deeplinkdemo.custumView.ScrollWebView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginTop="52dp"
             android:id="@+id/webview"/>
     <LinearLayout
             android:id="@+id/ll_bottom_bar"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:background="@color/colorPrimary"
+            android:background="@color/day_e7ebf3"
             android:orientation="horizontal"
             android:paddingLeft="41dp"
             android:paddingTop="9dp"

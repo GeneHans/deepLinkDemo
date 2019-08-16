@@ -3,16 +3,17 @@ package com.example.deeplinkdemo.inAPPBrowser
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
-import android.support.v7.app.AppCompatActivity
+import android.net.Uri
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.PopupMenu
 import android.view.KeyEvent
 import android.view.View
 import android.webkit.*
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.widget.*
 import com.example.deeplinkdemo.R
 import com.example.deeplinkdemo.custumView.ScrollWebView
+import com.example.deeplinkdemo.utils.IntentUtils
 
 /**
  * @author Gene Hans
@@ -25,12 +26,18 @@ class InAppBrowserActivity : AppCompatActivity(), ScrollWebView.OnPageListener {
     private var imgRightGray: ImageView? = null
     private var bottomBar: LinearLayout? = null
     private var textProgress: TextView? = null
+    private var imgBack: ImageView? = null
+    private var imgMenu: ImageView? = null
+    private var textTitle: TextView? = null
+    private var progressBar: ProgressBar? = null
     private var TAG = "openWeb"
+    private var currentUrl = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_in_app_browser)
         var url = intent.getStringExtra("Url")
+        currentUrl = url
         //获取View
         getView()
         //初始化Client
@@ -47,7 +54,13 @@ class InAppBrowserActivity : AppCompatActivity(), ScrollWebView.OnPageListener {
      * 设置所有监听
      */
     private fun setAllListener() {
+        //设置toolbar menu
+        if (imgMenu != null) {
+            setToolBarMenu()
+        }
+        //设置webView滑动监听
         webView?.setOnPageListener(this)
+
         imgLeftBlue?.setOnClickListener {
             if (webView?.canGoBack() == true) {
                 webView?.goBack()
@@ -55,13 +68,12 @@ class InAppBrowserActivity : AppCompatActivity(), ScrollWebView.OnPageListener {
         }
         imgRightBlue?.setOnClickListener {
             if (webView?.canGoForward() == true) {
-                webView?.canGoForward()
+                webView?.goForward()
             }
         }
-    }
-
-    override fun onStateNotSaved() {
-        super.onStateNotSaved()
+        imgBack?.setOnClickListener {
+            finish()
+        }
     }
 
     /**
@@ -87,12 +99,61 @@ class InAppBrowserActivity : AppCompatActivity(), ScrollWebView.OnPageListener {
         webView?.webChromeClient = object : WebChromeClient() {
             override fun onReceivedTitle(view: WebView?, title: String?) {
                 super.onReceivedTitle(view, title)
+                textTitle?.text = title ?: ""
             }
 
             override fun onProgressChanged(view: WebView?, newProgress: Int) {
+                progressBar?.progress = newProgress
+                if (newProgress == 100)
+                    progressBar?.visibility = View.GONE
                 super.onProgressChanged(view, newProgress)
-                textProgress?.text = newProgress.toString()
             }
+        }
+    }
+
+    /**
+     * 设置toolbar上的menu具体菜单内容
+     * 由于popupmenu存在有显示图标的错误，在此采用了反射的方法进行图片显示的设置
+     */
+    private fun setToolBarMenu() {
+        var popupMenu = PopupMenu(this, imgMenu!!)
+        popupMenu.menuInflater.inflate(R.menu.browser_menu, popupMenu.menu)
+        if (popupMenu.menu.javaClass.simpleName.equals("MenuBuilder", ignoreCase = true)) {
+            try {
+                val method =
+                    popupMenu.menu.javaClass.getDeclaredMethod(
+                        "setOptionalIconsVisible",
+                        java.lang.Boolean.TYPE
+                    )
+                method.isAccessible = true
+                method.invoke(popupMenu.menu, true)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+        popupMenu?.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.item_refresh -> {
+                    webView?.reload()
+                    true
+                }
+                R.id.item_copy_link -> {
+                    IntentUtils.instance().copyData(this, currentUrl)
+                    Toast.makeText(this@InAppBrowserActivity, "复制链接成功", Toast.LENGTH_SHORT).show()
+                    true
+                }
+                R.id.item_open_others -> {
+                    var intent = Intent(Intent.ACTION_VIEW, Uri.parse(currentUrl))
+                    startActivity(intent)
+                    true
+                }
+                else -> {
+                    true
+                }
+            }
+        }
+        imgMenu?.setOnClickListener {
+            popupMenu.show()
         }
     }
 
@@ -106,13 +167,55 @@ class InAppBrowserActivity : AppCompatActivity(), ScrollWebView.OnPageListener {
             }
 
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
-                super.onPageStarted(view, url, favicon)
-
+                if (url == null)
+                    return
+                updateBottomBar()
+                currentUrl = url
+                //标准网址直接加载
+                if (url.startsWith("http://") || url.startsWith("https://")) {
+                    super.onPageStarted(view, url, favicon)
+                } else {
+                    try {
+                        var intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                        startActivity(intent)
+                        //跳转之后返回上衣页面
+                        if (webView?.canGoBack() == true)
+                            webView?.goBack()
+                        else
+                            this@InAppBrowserActivity.finish()
+                    } catch (e: Exception) {        //防止出现特殊域名导致出错
+                        if (webView?.canGoBack() == true)
+                            webView?.goBack()
+                        else
+                            this@InAppBrowserActivity.finish()
+                    }
+                }
             }
 
             override fun onReceivedError(view: WebView?, request: WebResourceRequest?, error: WebResourceError?) {
+                updateBottomBar()
                 super.onReceivedError(view, request, error)
             }
+        }
+    }
+
+    /**
+     * 更新底部bar前进后退状态
+     */
+    private fun updateBottomBar() {
+        if (webView?.canGoBack() == true) {
+            imgLeftGray?.visibility = View.GONE
+            imgLeftBlue?.visibility = View.VISIBLE
+        } else {
+            imgLeftGray?.visibility = View.VISIBLE
+            imgLeftBlue?.visibility = View.GONE
+        }
+        if (webView?.canGoForward() == true) {
+            imgRightGray?.visibility = View.GONE
+            imgRightBlue?.visibility = View.VISIBLE
+        } else {
+            imgRightGray?.visibility = View.VISIBLE
+            imgRightBlue?.visibility = View.GONE
         }
     }
 
@@ -127,6 +230,10 @@ class InAppBrowserActivity : AppCompatActivity(), ScrollWebView.OnPageListener {
         imgRightGray = findViewById(R.id.img_forward_gray)
         bottomBar = findViewById(R.id.ll_bottom_bar)
         textProgress = findViewById(R.id.text_progress)
+        imgBack = findViewById(R.id.img_back)
+        textTitle = findViewById(R.id.text_title)
+        imgMenu = findViewById(R.id.img_menu)
+        progressBar = findViewById(R.id.browser_progressbar)
     }
 
     /**

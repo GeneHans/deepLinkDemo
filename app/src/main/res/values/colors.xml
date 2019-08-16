@@ -3,4 +3,9 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
+
+    <color name="day_e7ebf3">#e7ebf3</color>
+    <color name="day_ffffff">#ffffff</color>
+    <color name="day_502380f5">#502380f5</color>
+    <color name="day_008adb">#008adb</color>
 </resources>

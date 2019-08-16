@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:id="@+id/item_refresh"
+          android:icon="@mipmap/ic_browser_right_gray"
+          android:title="@string/browser_refresh"
+          android:orderInCategory="100"
+          app:showAsAction="never"/>
+
+    <item android:id="@+id/item_copy_link"
+          android:icon="@mipmap/ic_browser_right_gray"
+          android:title="@string/browser_copy_link"
+          android:orderInCategory="100"
+          app:showAsAction="never"/>
+
+    <item android:id="@+id/item_open_others"
+          android:icon="@mipmap/ic_browser_right_gray"
+          android:title="@string/browser_open_others"
+          android:orderInCategory="100"
+          app:showAsAction="never"/>
+</menu>
