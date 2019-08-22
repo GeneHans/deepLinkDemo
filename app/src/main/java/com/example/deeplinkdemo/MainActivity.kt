@@ -1,9 +1,9 @@
 package com.example.deeplinkdemo
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.TextView
-import com.example.deeplinkdemo.utils.IntentUtils
+import androidx.appcompat.app.AppCompatActivity
+import com.example.deeplinkdemo.deeplink.TargetActivity
 
 class MainActivity : AppCompatActivity() {
 
@@ -16,7 +16,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         textMain = findViewById(R.id.text_main)
         textMain?.setOnClickListener {
-            IntentUtils().openInAppBrowser(this, url)
+            startActivity(TargetActivity.getIntent(this))
+//            IntentUtils().openInAppBrowser(this, url)
         }
     }
 }

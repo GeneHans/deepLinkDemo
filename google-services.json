@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "381356038534",
+    "firebase_url": "https://ghdemo1-c4c70.firebaseio.com",
+    "project_id": "ghdemo1-c4c70",
+    "storage_bucket": "ghdemo1-c4c70.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:381356038534:android:2b94e6f0581f1791",
+        "android_client_info": {
+          "package_name": "com.example.deeplinkdemo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "381356038534-b61pma57jgbhdtseugai8g2di63ma76k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAzn6CBVtn1wehPC6Asgh6hFU7yYo4_3Z4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "381356038534-b61pma57jgbhdtseugai8g2di63ma76k.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
