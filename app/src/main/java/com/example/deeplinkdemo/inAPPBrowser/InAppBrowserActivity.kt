@@ -47,11 +47,11 @@ class InAppBrowserActivity : AppCompatActivity(), ScrollWebView.OnPageListener {
         //初始化Client
         setWebViewClient()
         setWebChromeClient()
+        setCookie(cookie, currentUrl)
         //设置web Setting
         setWebSetting()
         //设置所有监听
         setAllListener()
-        setCookie(cookie, currentUrl)
         webView?.loadUrl(url)
     }
 
@@ -91,6 +91,7 @@ class InAppBrowserActivity : AppCompatActivity(), ScrollWebView.OnPageListener {
         webSettings?.useWideViewPort = true  //将图片调整到适合webview的大小
         webSettings?.loadWithOverviewMode = true // 缩放至屏幕的大小
         webSettings?.allowFileAccess = true  //设置可以访问文件
+        webSettings?.setGeolocationEnabled(true)
         webSettings?.setNeedInitialFocus(true) //当webview调用requestFocus时为webview设置节点
         webSettings?.javaScriptCanOpenWindowsAutomatically = true //支持通过JS打开新窗口
         webSettings?.loadsImagesAutomatically = true  //支持自动加载图片
@@ -113,11 +114,19 @@ class InAppBrowserActivity : AppCompatActivity(), ScrollWebView.OnPageListener {
                     progressBar?.visibility = View.GONE
                 super.onProgressChanged(view, newProgress)
             }
+
+            override fun onGeolocationPermissionsShowPrompt(
+                origin: String?,
+                callback: GeolocationPermissions.Callback?
+            ) {
+                callback?.invoke(origin,true,true)
+                super.onGeolocationPermissionsShowPrompt(origin, callback)
+            }
         }
     }
 
     /**
-     * 设置toolbar上的menu具体菜单内容
+     An* 设置toolbar上的menu具体菜单内容
      * 由于popupmenu存在有显示图标的错误，在此采用了反射的方法进行图片显示的设置
      */
     private fun setToolBarMenu() {

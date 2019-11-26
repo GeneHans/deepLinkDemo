@@ -2,6 +2,7 @@ package com.example.deeplinkdemo.utils
 
 import android.content.ClipboardManager
 import android.content.Context
+import android.content.Intent
 import com.example.deeplinkdemo.inAPPBrowser.InAppBrowserActivity
 
 class IntentUtils {
@@ -10,6 +11,7 @@ class IntentUtils {
      */
     fun openInAppBrowser(context: Context, url: String) {
         var intent = InAppBrowserActivity.getIntent(context, url)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         context.startActivity(intent)
     }
 
